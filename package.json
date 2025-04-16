@@ -1,0 +1,19 @@
+{
+  "name": "tinderdev-be",
+  "version": "1.0.0",
+  "description": "tinder for dev",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "star":"node src/app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript"
+  ],
+  "author": "vivek",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
