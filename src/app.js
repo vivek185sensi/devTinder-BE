@@ -1,42 +1,38 @@
 const express=require('express');
+const { userAuth, adminAuth } = require('./middlewares/auth');
 const app=express()
 
-
-app.post('/local/boy',(req,res)=>{
-    res.send('sub local')
-})
-
-
-app.get('/local',(req,res)=>{
-    res.send('i am local')  
-})
-
-app.delete('local',(req,res)=>{
-    res.send('finall delete')
-})
-
-app.get(/.*fly$/,(req,res)=>{
-    res.send('this is regex');
-})
-
-app.get('n?w',(req,res)=>{
-    res.send('this is question')
-})
-
-app.get('no*w',(req,res)=>{
+app.get('/no*w',(req,res)=>{
     res.send('this is multiples')
 })
 
-app.get('som+e',(req,res)=>{
-    res.send('this is add ')
+app.get('/admin',adminAuth);
+
+app.get('/admin/data',(req,res)=>{
+    res.send('hello admin')
+});
+
+app.get('/user',userAuth,(req,res)=>{
+    console.log('check the user')
+    res.send('hello user')
 })
 
-app.get('e(ve)+n',(req,res)=>{
-    res.send('this is group ')
+
+
+
+app.get('/nex',(req,res,next)=>{
+    console.log('this is nex log')
+    // res.send('this is nex response')
+    next()
+},(req,res,next)=>{
+    console.log('this 2nd nex log')
+    throw new Error('some hit')
+    res.send('this is 2ND nex response')
 })
 
-app.use('/',(req,res)=>{
-    res.send('Hello Nodejs app')
+
+app.use('/',(err,req,res,next)=>{
+    res.status(500).send('something went wrong')
 })
 
 app.listen(5000,()=>{
