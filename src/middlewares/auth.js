@@ -1,3 +1,5 @@
+const fs=require('fs')
+
 const userAuth = (req, res, next) => {
     const token = 'xyz'
     console.log('vivek req', req.body)
