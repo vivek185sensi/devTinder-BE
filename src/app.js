@@ -1,8 +1,9 @@
 const express = require('express');
 const { userAuth, adminAuth } = require('./middlewares/auth');
 const { db } = require('./config/database');
-const userModal = require('./models/userModel').default.default;
-const app = express()
+const bcrypt=require('bcrypt')
+const {userModal} = require('./models/userModel');
+const app = express();
 
 app.use(express.json())
 
@@ -36,12 +37,20 @@ app.delete('/delete', async (req, res) => {
 
 app.post('/profile', async (req, res) => {
     try {
-
-        const user = new userModal(req.body)
-        await user.save();
+        
+        const {name,password,confirmpassword,gender} = req.body
+        
+        console.log('entered profile')
+        const hashed=await bcrypt.hash(password,10)
+        const matched=await bcrypt.compare(confirmpassword,hashed)
+        if(!matched){
+            throw new Error('password not matched')
+        }
+        const user=new userModal({name,password:hashed,confirmpassword:hashed,gender})
+        await user.save()
         res.send("user saved successfully")
     } catch (err) {
-        res.send('user addign failed')
+        res.status(500).json({message:"something went wrong",error:err.message})
     }
 })
 
