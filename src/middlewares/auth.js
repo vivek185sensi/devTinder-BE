@@ -1,25 +1,19 @@
-const fs=require('fs')
-
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 const userAuth = (req, res, next) => {
-    const token = 'xyz'
-    console.log('vivek req', req.body)
-    const authentication = "xyz" === token;
-    if (!authentication) {
-        res.status(401).send('User not found')
-    } else {
-        next()
+    try {
+        const { accessToken } = req.cookies
+        const authentication = jwt.verify(accessToken, process.env.SECRET_KEY)
+        if (!authentication) {
+            res.status(401).send('User not found')
+        } 
+        req.user=authentication
+            next();
+    
+    } catch (err) {
+        return res.status(401).json('Invalid or expired token')
     }
 }
 
-const adminAuth = (req, res, next) => {
-    const token = 'xyz'
-    console.log('vivek req', req.body)
-    const authentication = "xyz" === token;
-    if (!authentication) {
-        res.status(401).send('User not found')
-    } else {
-        next()
-    }
-}
 
-module.exports = { userAuth,adminAuth }
+module.exports =  userAuth 
