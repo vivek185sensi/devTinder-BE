@@ -35,6 +35,7 @@ requestRouter.post("/send/:status/:toUserId", userAuth, async (req, res) => {
         const statustype = ['interested', 'rejected']
         const connectionRequest = new ConnectionRequestModel({ fromUserId, toUserId, status })
         const user = userModal.findById(toUserId)
+        if(fromUserId !== toUserId) return res.send({message:"Cannot send Yourself"})
         if (!user) { return res.status(404).send({ message: "User not found" }) }
         if (!statustype.includes(status)) {
             return res.status(401).send({ message: 'Invalid Request' })

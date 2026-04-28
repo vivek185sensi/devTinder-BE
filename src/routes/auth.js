@@ -8,7 +8,6 @@ authRouter.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body
         const user = await userModal.findOne({ email })
-           console.log('check the user login',req.body,user)
         if (!user) {
             res.status(404).send('User Not found');
         }
